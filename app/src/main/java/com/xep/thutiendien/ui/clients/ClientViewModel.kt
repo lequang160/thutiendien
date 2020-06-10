@@ -23,7 +23,7 @@ class ClientViewModel : BaseViewModel() {
 
     fun fetchCustomer(){
         CoroutineScope(Dispatchers.IO).launch {
-            val order = safeApiCall { mApi.fetchOrderList("0") }
+            val order = safeApiCall { mApi.fetchOrderList("0", "1") }
             withContext(Dispatchers.Main){
                 when(order){
                     is ResultState.Success -> orderLiveData.postValue(order.data.map { it.toOrderModel() })

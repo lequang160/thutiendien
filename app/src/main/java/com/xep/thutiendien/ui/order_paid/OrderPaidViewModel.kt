@@ -23,7 +23,7 @@ class OrderPaidViewModel : BaseViewModel() {
 
     fun fetchOrderPaid(){
         CoroutineScope(Dispatchers.IO).launch {
-            val order = safeApiCall { mApi.fetchOrderList("1") }
+            val order = safeApiCall { mApi.fetchOrderList("1", "1") }
             withContext(Dispatchers.Main){
                 when(order){
                     is ResultState.Success -> orderLiveData.postValue(order.data.map { it.toOrderModel() })

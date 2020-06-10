@@ -14,15 +14,13 @@ import kotlinx.coroutines.withContext
 
 class OrderViewModel : BaseViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
+    private val _text = MutableLiveData<String>()
     val text: LiveData<String> = _text
     val orderLiveData = SingleLiveEvent<List<OrderModel>>()
 
-    fun fetchOrder(){
+    fun fetchOrder(page: String){
         CoroutineScope(Dispatchers.IO).launch {
-            val order = safeApiCall { mApi.fetchOrderList("") }
+            val order = safeApiCall { mApi.fetchOrderList("", page) }
             withContext(Dispatchers.Main){
                 when(order){
                     is ResultState.Success -> orderLiveData.postValue(order.data.map { it.toOrderModel() })

@@ -1,5 +1,9 @@
 package com.xep.thutiendien.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class OrderModel(
     var customerName: String,
     var phoneNumber: String,
@@ -11,4 +15,4 @@ data class OrderModel(
     var customerId: String,
     var note: String,
     var id: String
-)
+) : Parcelable

@@ -23,6 +23,7 @@ import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
 
+    var searchView: SearchView? = null
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     var mSearchListener: ((query: String) -> Unit)? = null
@@ -68,14 +69,14 @@ class MainActivity : AppCompatActivity() {
         val searchManager =
             this@MainActivity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        var searchView: SearchView? = null
+
         if (searchItem != null) {
             searchView = searchItem.actionView as SearchView
         }
         searchView?.setSearchableInfo(searchManager.getSearchableInfo(this@MainActivity.componentName))
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-               mSearchListener?.invoke(query ?: "")
+                mSearchListener?.invoke(query ?: "")
                 return true
             }
 
@@ -85,11 +86,28 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+        searchView?.setOnCloseListener(object : SearchView.OnCloseListener {
+            override fun onClose(): Boolean {
+                mSearchListener?.invoke("")
+                return false
+            }
+        })
+
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onBackPressed() {
+        if (searchView != null && searchView?.isIconified!!) {
+            searchView?.onActionViewCollapsed()
+        } else {
+
+            super.onBackPressed();
+        }
+
     }
 }
